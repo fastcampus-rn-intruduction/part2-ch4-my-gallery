@@ -1,24 +1,17 @@
 import { useEffect } from "react";
 import {
   Alert,
-  Dimensions,
-  FlatList,
-  Image,
   Platform,
   SafeAreaView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
 } from "react-native";
 import BigImgModal from "./src/BigImgModal";
+import ImageList from "./src/ImageList";
 
 import MyDropDownPicker from "./src/MyDropDownPicker";
 import TextInputModal from "./src/TextInputModal";
 import { useGallery } from "./src/use-gallery";
 import { useRewardAd } from "./src/use-reward-ad";
-
-const width = Dimensions.get("screen").width;
-const columnSize = width / 3;
 
 export default function App() {
   const { 
@@ -128,33 +121,6 @@ export default function App() {
     }
   }, [isRewarded, isClosed]);
 
-  const renderItem = ({ item: image, index }) => {
-    const { id, uri } = image;
-    if (id === -1) {
-      return (
-        <TouchableOpacity 
-          onPress={onPressOpenGallery}
-          style={{
-            width: columnSize, 
-            height: columnSize, 
-            backgroundColor: "lightgrey",
-            justifyContent: "center",
-            alignItems: "center",
-          }}>
-          <Text style={{ fontWeight: "100", fontSize: 45 }}>+</Text>    
-        </TouchableOpacity>
-      )
-    }
-    return (
-      <TouchableOpacity onPress={() => onPressImage(image)} onLongPress={() => onLongPressImage(id)}>
-        <Image
-          source={{ uri }}
-          style={{ width: columnSize, height: columnSize }}
-        />
-      </TouchableOpacity>
-    );
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       {/* 앨범 DropDown, 앨범 추가 버튼 */}
@@ -189,11 +155,11 @@ export default function App() {
       />
 
       {/* 이미지 리스트 */}
-      <FlatList 
-        data={imagesWithAddButton} 
-        renderItem={renderItem} 
-        numColumns={3} 
-        style={{ zIndex: -1 }}
+      <ImageList
+        imagesWithAddButton={imagesWithAddButton}
+        onPressOpenGallery={onPressOpenGallery}
+        onPressImage={onPressImage}
+        onLongPressImage={onLongPressImage}
       />
     </SafeAreaView>
   );
