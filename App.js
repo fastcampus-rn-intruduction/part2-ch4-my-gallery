@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import {
+  Alert,
   Dimensions,
   FlatList,
   Image,
@@ -13,6 +15,7 @@ import BigImgModal from "./src/BigImgModal";
 import MyDropDownPicker from "./src/MyDropDownPicker";
 import TextInputModal from "./src/TextInputModal";
 import { useGallery } from "./src/use-gallery";
+import { useRewardAd } from "./src/use-reward-ad";
 
 const width = Dimensions.get("screen").width;
 const columnSize = width / 3;
@@ -46,13 +49,35 @@ export default function App() {
     showPreviousArrow,
     showNextArrow
   } = useGallery();
+  const { 
+    loadRewardAd,
+    isRewarded,
+    isClosed,
+    resetAdValue,
+  } = useRewardAd();
 
   const onPressOpenGallery = () => {
     pickImage();
   };
   const onLongPressImage = (iamgeId) => deleteImage(iamgeId);
+  const onPressWatchAd = () => {
+    loadRewardAd();
+  };
   const onPressAddAlbum = () => {
-    openTextInputModal();
+    if (albums.length >= 2) {
+      Alert.alert("광고를 시청해야 앨범을 추가할 수 있습니다.", "", [
+        {
+          style: "cancel",
+          text: "닫기"
+        },
+        {
+          text: "광고 시청",
+          onPress: onPressWatchAd,
+        }
+      ])
+    } else {
+      openTextInputModal();
+    }
   };
   const onSubmitEditing = () => {
     if (!albumTitle) return;
@@ -95,6 +120,13 @@ export default function App() {
   const onPressRightArrow = () => {
     moveToNextImage();
   }
+
+  useEffect(() => {
+    if (isRewarded && isClosed) {
+      openTextInputModal();
+      resetAdValue();
+    }
+  }, [isRewarded, isClosed]);
 
   const renderItem = ({ item: image, index }) => {
     const { id, uri } = image;
