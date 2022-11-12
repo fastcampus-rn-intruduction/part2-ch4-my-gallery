@@ -3,9 +3,22 @@ import {
   Modal,
   Platform,
   Pressable,
-  SafeAreaView,
-  TextInput,
 } from "react-native";
+import styled from 'styled-components/native';
+
+const SafeAreaViewContainer = styled.SafeAreaView`
+  flex: 1;
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+`;
+const AlbumTitleTextInput = styled.TextInput`
+  width: 100%;
+  padding: 10px;
+  border-width: 0.5px;
+  border-color: lightgrey;
+  background-color: white;
+`;
 
 const Content = ({
   albumTitle,
@@ -15,24 +28,15 @@ const Content = ({
 }) => {
   return (
     <Pressable onPress={onPressBackdrop} style={{ flex: 1 }}>
-      <SafeAreaView
-        style={{ flex: 1, width: "100%", position: "absolute", bottom: 0 }}
-      >
-        <TextInput
+      <SafeAreaViewContainer>
+        <AlbumTitleTextInput
           placeholder="앨범명을 입력해주세요"
-          style={{
-            width: "100%",
-            padding: 10,
-            borderWidth: 0.5,
-            borderColor: "lightgrey",
-            backgroundColor: "white",
-          }}
           value={albumTitle}
           onChangeText={setAlbumTitle}
           onSubmitEditing={onSubmitEditing}
           autoFocus={true}
         />
-      </SafeAreaView>
+      </SafeAreaViewContainer>
     </Pressable>
   );
 };

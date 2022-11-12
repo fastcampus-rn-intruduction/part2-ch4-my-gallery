@@ -1,4 +1,5 @@
 import { FlatList, Dimensions, Image, Text, TouchableOpacity, Platform } from "react-native";
+import styled from 'styled-components/native';
 
 const width = Dimensions.get("screen").width;
 const minColumSize = width >= 500 ? 200 : 130;
@@ -13,6 +14,14 @@ const columnSize = width / numColumns;
 // console.log('numColumns', numColumns);
 // console.log('columnSize', columnSize);
 
+const AddImgBtnContainer = styled.TouchableOpacity`
+  width: ${columnSize}px;
+  height: ${columnSize}px;
+  background-color: lightgrey;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default ({ 
   imagesWithAddButton,
   onPressOpenGallery,
@@ -23,17 +32,9 @@ export default ({
     const { id, uri } = image;
     if (id === -1) {
       return (
-        <TouchableOpacity
-          onPress={onPressOpenGallery}
-          style={{
-            width: columnSize, 
-            height: columnSize, 
-            backgroundColor: "lightgrey",
-            justifyContent: "center",
-            alignItems: "center",
-          }}>
+        <AddImgBtnContainer onPress={onPressOpenGallery}>
           <Text style={{ fontWeight: "100", fontSize: 45 }}>+</Text>    
-        </TouchableOpacity>
+        </AddImgBtnContainer>
       )
     }
     return (
